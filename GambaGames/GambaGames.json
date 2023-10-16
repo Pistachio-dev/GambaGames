@@ -1,0 +1,14 @@
+{
+  "Author": "MilesNocte",
+  "Name": "GambaGames",
+  "Punchline": "For all of your gambling needs",
+  "Description": "A set of gambling games for casinos to use!",
+  "InternalName": "gambaGames",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "Gambling",
+    "Casino",
+    "Deathroll",
+    "Blackjack"
+  ]
+}
