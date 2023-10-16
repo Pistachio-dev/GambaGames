@@ -3,12 +3,14 @@
   "Name": "GambaGames",
   "Punchline": "For all of your gambling needs",
   "Description": "A set of gambling games for casinos to use!",
-  "InternalName": "gambaGames",
+  "RepoUrl": "https://github.com/Milesnocte/GambaGames",
+  "InternalName": "GambaGames",
   "ApplicableVersion": "any",
   "Tags": [
     "Gambling",
     "Casino",
     "Deathroll",
     "Blackjack"
-  ]
+  ],
+  "DalamudApiLevel": 9
 }
