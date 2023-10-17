@@ -6,4 +6,4 @@ Currently implemented games:
 
 
 Custom Plugin Link:
-`https://raw.githubusercontent.com/Milesnocte/GambaGames/main/GambaGames/GambaGames.json`
+`https://raw.githubusercontent.com/Milesnocte/GambaGames/main/repo.json`
