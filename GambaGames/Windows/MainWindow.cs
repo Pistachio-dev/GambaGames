@@ -8,6 +8,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Utility;
 using Dalamud.Plugin.Services;
 using ECommons.ImGuiMethods;
 using GambaGames.Games;
@@ -45,8 +46,8 @@ namespace GambaGames.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = new Vector2(375, 330),
-                MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
+                MinimumSize = ImGuiHelpers.ScaledVector2(375, 330),
+                MaximumSize = ImGuiHelpers.ScaledVector2(float.MaxValue, float.MaxValue)
             };
             
             this.Logo = logo;
@@ -194,7 +195,7 @@ namespace GambaGames.Windows
 
                 ImGui.SameLine();
             
-                if (ImGui.Button("Reshuffle", new Vector2(75,25)))
+                if (ImGui.Button("Reshuffle", ImGuiHelpers.ScaledVector2(75,25)))
                 {
                     Deck.Shuffle();
                 }
@@ -218,12 +219,12 @@ namespace GambaGames.Windows
 
                         ImGui.TextWrapped(clientState.LocalPlayer.TargetObject.Name.TextValue);
                         ImGui.SameLine();
-                        if (ImGui.Button("Add", new Vector2(40, 22)))
+                        if (ImGui.Button("Add", ImGuiHelpers.ScaledVector2(40, 22)))
                         {
                             nonPartyplayers.Add(clientState.LocalPlayer.TargetObject.Name.TextValue);
                         }
                         ImGui.SameLine();
-                        if (ImGui.Button("Remove", new Vector2(65, 22)))
+                        if (ImGui.Button("Remove", ImGuiHelpers.ScaledVector2(65, 22)))
                         {
                             nonPartyplayers.Remove(clientState.LocalPlayer.TargetObject.Name.TextValue);
                         }
@@ -264,7 +265,7 @@ namespace GambaGames.Windows
                             ImGui.SameLine();
                             ImGui.TextWrapped(nonPartyplayer);
                             ImGui.SameLine();
-                            if (ImGui.Button("X", new Vector2(20, 22))) 
+                            if (ImGui.Button("X", ImGuiHelpers.ScaledVector2(20, 22))) 
                             { nonPartyplayers.Remove(nonPartyplayer);
                             }
                         }
@@ -274,7 +275,7 @@ namespace GambaGames.Windows
                 
                 ImGui.Spacing();
                 
-                if (ImGui.Button("Start Game", new Vector2(150,50)))
+                if (ImGui.Button("Start Game", ImGuiHelpers.ScaledVector2(150,50)))
                 {
                     counter = 0;
                     foreach (var b in playing)
@@ -312,11 +313,11 @@ namespace GambaGames.Windows
                 try
                 {
                     ImGui.TextWrapped("GAME IN PROGRESS");
-                    ImGui.SameLine(125);
-                    ImGui.PushItemWidth(100);
+                    ImGui.SameLine(125f.Scale());
+                    ImGui.PushItemWidth(100f.Scale());
                     ImGui.Combo("Chat Type", ref SelectedChatType, ChatTypes, ChatTypes.Length);
-                    ImGui.SameLine(ImGui.GetWindowWidth() - 80);
-                    if (ImGui.Button("End Game", new Vector2(75, 22)))
+                    ImGui.SameLine(ImGui.GetWindowWidth() - 80f.Scale());
+                    if (ImGui.Button("End Game", ImGuiHelpers.ScaledVector2(75f, 22)))
                     {
                         ShowGame = true;
                         players.Clear();
@@ -326,15 +327,15 @@ namespace GambaGames.Windows
 
                     if (GameIsOver && ShowGame)
                     {
-                        ImGui.SameLine(ImGui.GetWindowWidth() - 160);
-                        if (ImGui.Button("Results", new Vector2(75, 22)))
+                        ImGui.SameLine(ImGui.GetWindowWidth() - 160f.Scale());
+                        if (ImGui.Button("Results", ImGuiHelpers.ScaledVector2(75, 22)))
                         {
                             ShowGame = false;
                         }
                     }
-
+                    
                     ImGui.Separator();
-
+                    
                     if (ShowGame)
                     {
                         int counter = 0;
@@ -350,21 +351,21 @@ namespace GambaGames.Windows
                                     {
                                         if (!Hands.DealerStay(Hands.GetHand(dealerName, false)))
                                         {
-                                            if (ImGui.Button("Hit", new Vector2(50, 22))) 
+                                            if (ImGui.Button("Hit", ImGuiHelpers.ScaledVector2(50, 22))) 
                                             { 
                                                 Hands.Draw(player, decks);
                                             }
                                                 
                                             ImGui.Spacing();
                                             ImGui.PushID($"{dealerName.Replace(" ", "_")}_copy");
-                                            if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                            if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                             {
                                                 ImGui.SetClipboardText(playersHands[counter]);
                                                 Notify.Success("Copied hand to clipboard");
                                             }
 
                                             ImGui.SameLine();
-                                            ImGui.PushItemWidth(300);
+                                            ImGui.PushItemWidth(300f.Scale());
                                             ImGui.PushID($"{dealerName}_copy");
                                             ImGui.PushID($"{dealerName.Replace(" ", "_")}_hand");
                                             ImGui.InputText($"", ref playersHands[counter], 200);
@@ -387,13 +388,13 @@ namespace GambaGames.Windows
                                         }
                                         else
                                         {
-                                            ImGui.PushItemWidth(300);
+                                            ImGui.PushItemWidth(300f.Scale());
                                             ImGui.InputText($"", ref playersHands[counter], 200);
                                             ImGui.SameLine();
                                             playersHands[counter] =
                                                 $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(dealerName, false)} ({Hands.HandValue(Hands.GetHand(dealerName, false), player)})";
                                             ImGui.SameLine();
-                                            if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                            if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                             {
                                                 ImGui.SetClipboardText(playersHands[counter]);
                                                 Notify.Success("Copied hand to clipboard");
@@ -401,13 +402,13 @@ namespace GambaGames.Windows
 
                                             if (Hands.GetHand(dealerName, true).Contains('?'))
                                             {
-                                                ImGui.PushItemWidth(300);
+                                                ImGui.PushItemWidth(300f.Scale());
                                                 ImGui.InputText($"", ref playersHands[counter], 200);
                                                 ImGui.SameLine();
                                                 playersHands[counter] =
                                                     $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(dealerName, true)}";
                                                 ImGui.SameLine();
-                                                if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                                if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                                 {
                                                     ImGui.SetClipboardText(playersHands[counter]);
                                                     Notify.Success("Copied hand to clipboard");
@@ -425,7 +426,7 @@ namespace GambaGames.Windows
                                         playersHands[counter] =
                                             $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(dealerName, true)} ({Hands.HandValue(Hands.GetHand(dealerName, false), player)}) - BUST";
                                         ImGui.SameLine();
-                                        if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                        if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                         {
                                             ImGui.SetClipboardText(playersHands[counter]);
                                             Notify.Success("Copied hand to clipboard");
@@ -442,9 +443,9 @@ namespace GambaGames.Windows
                             {
                                 ImGui.Text("Bet: ");
                                 ImGui.SameLine();
-                                ImGui.PushItemWidth(105);
+                                ImGui.PushItemWidth(105f.Scale());
                                 ImGui.PushID($"{player.Replace(" ", "_")}_bet");
-                                if (ImGui.InputText($"", ref playersBets[counter], 100))
+                                if (ImGui.InputText($"", ref playersBets[counter], 200))
                                 {
                                     playersBets[counter] =
                                         string.Format(CultureInfo.InvariantCulture, "{0:n0}",
@@ -457,7 +458,7 @@ namespace GambaGames.Windows
                                     ImGui.Spacing();
                                     ImGui.SameLine();
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hit");
-                                    if (ImGui.Button("Hit", new Vector2(50, 22)))
+                                    if (ImGui.Button("Hit", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
                                         Hands.Draw(player, decks);
                                         canSurrender[counter] = false;
@@ -467,7 +468,7 @@ namespace GambaGames.Windows
                                     {
                                         ImGui.SameLine();
                                         ImGui.PushID($"{player.Replace(" ", "_")}_split");
-                                        if (ImGui.Button("Split", new Vector2(50, 22)))
+                                        if (ImGui.Button("Split", ImGuiHelpers.ScaledVector2(50, 22)))
                                         {
                                             // Move the dealer hand and bet to the over 1 index
                                             // and insert the new "player" into the gap
@@ -484,7 +485,7 @@ namespace GambaGames.Windows
 
                                     ImGui.SameLine();
                                     ImGui.PushID($"{player.Replace(" ", "_")}_dd");
-                                    if (ImGui.Button("Double Down", new Vector2(100, 22)))
+                                    if (ImGui.Button("Double Down", ImGuiHelpers.ScaledVector2(100, 22)))
                                     {
                                         Hands.DoubleDown(player, decks);
 
@@ -496,7 +497,7 @@ namespace GambaGames.Windows
 
                                     ImGui.SameLine();
                                     ImGui.PushID($"{player.Replace(" ", "_")}_stay");
-                                    if (ImGui.Button("Stay", new Vector2(50, 22)))
+                                    if (ImGui.Button("Stay", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
                                         Hands.SetGameOver(player);
                                     }
@@ -505,7 +506,7 @@ namespace GambaGames.Windows
                                     {
                                         ImGui.SameLine();
                                         ImGui.PushID($"{player.Replace(" ", "_")}_surrender");
-                                        if (ImGui.Button("Surrender", new Vector2(75, 22)))
+                                        if (ImGui.Button("Surrender", ImGuiHelpers.ScaledVector2(75, 22)))
                                         {
                                             players.Clear();
                                             gameInProgress = false;
@@ -514,14 +515,14 @@ namespace GambaGames.Windows
 
                                     ImGui.Spacing();
                                     ImGui.PushID($"{player.Replace(" ", "_")}_copy");
-                                    if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                    if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
                                         ImGui.SetClipboardText(playersHands[counter]);
                                         Notify.Success("Copied hand to clipboard");
                                     }
 
                                     ImGui.SameLine();
-                                    ImGui.PushItemWidth(500);
+                                    ImGui.PushItemWidth(500f.Scale());
                                     ImGui.PushID($"{player}_copy");
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
                                     if (player.Contains(" 2"))
@@ -538,14 +539,14 @@ namespace GambaGames.Windows
                                     }
 
                                     ImGui.PushID($"{player.Replace(" ", "_")}_copy");
-                                    if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                    if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
                                         ImGui.SetClipboardText(playersChoices[counter]);
                                         Notify.Success("Copied options to clipboard");
                                     }
 
                                     ImGui.SameLine();
-                                    ImGui.PushItemWidth(500);
+                                    ImGui.PushItemWidth(500f.Scale());
                                     ImGui.PushID($"{player}_copy");
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
                                     ImGui.InputText($"", ref playersChoices[counter], 200);
@@ -571,14 +572,14 @@ namespace GambaGames.Windows
                                 else
                                 {
                                     ImGui.PushID($"{player.Replace(" ", "_")}_copy");
-                                    if (ImGui.Button("Copy", new Vector2(50, 22)))
+                                    if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
                                         ImGui.SetClipboardText(playersHands[counter]);
                                         Notify.Success("Copied hand to clipboard");
                                     }
 
                                     ImGui.SameLine();
-                                    ImGui.PushItemWidth(300);
+                                    ImGui.PushItemWidth(300f.Scale());
                                     ImGui.PushID($"{player}_copy");
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
                                     ImGui.InputText($"", ref playersHands[counter], 200);
@@ -719,13 +720,13 @@ namespace GambaGames.Windows
                         ImGui.Separator();
                         string resultString = $"/{ChatTypes[SelectedChatType]} {GameResults} Good Game!";
                         ImGui.PushID($"final_copy");
-                        if (ImGui.Button("Copy", new Vector2(50, 22)))
+                        if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                         {
                             ImGui.SetClipboardText(resultString);
                             Notify.Success("Copied hand to clipboard");
                         }
                         ImGui.SameLine();
-                        ImGui.PushItemWidth(300);
+                        ImGui.PushItemWidth(300f.Scale());
                         ImGui.PushID($"Final_result_string");
                         ImGui.InputText($"", ref resultString, 200);
                         GameResults = "";
