@@ -2,9 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>MilesNocte</Authors>
-    <Version>0.0.0.1</Version>
+    <Version>0.0.0.3</Version>
     <Description>GambaGames</Description>
-    <PackageProjectUrl>https://github.com</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Milesnocte/GambaGames</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
