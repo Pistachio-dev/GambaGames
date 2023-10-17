@@ -46,8 +46,8 @@ namespace GambaGames.Windows
         {
             this.SizeConstraints = new WindowSizeConstraints
             {
-                MinimumSize = ImGuiHelpers.ScaledVector2(375, 330),
-                MaximumSize = ImGuiHelpers.ScaledVector2(float.MaxValue, float.MaxValue)
+                MinimumSize = new Vector2(375, 330),
+                MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
             };
             
             this.Logo = logo;

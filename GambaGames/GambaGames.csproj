@@ -69,10 +69,4 @@
     </Reference>
   </ItemGroup>
 
-
-
-  <ItemGroup>
-    <None Include="bin\x64\Debug\gamba-icon.png" />
-  </ItemGroup>
-
 </Project>
