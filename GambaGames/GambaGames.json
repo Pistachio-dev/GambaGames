@@ -1,4 +1,4 @@
-{
+[{
     "Author": "MilesNocte",
     "Name": "GambaGames",
     "InternalName": "GambaGames",
@@ -22,4 +22,4 @@
     "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
     "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
     "AcceptsFeedback": true
-}
+}]
