@@ -1,0 +1,22 @@
+{
+  "Author": "MilesNocte",
+  "Name": "GambaGames",
+  "InternalName": "GambaGames",
+  "AssemblyVersion": "0.0.0.1",
+  "Description": "A set of gambling games for casinos to use!",
+  "ApplicableVersion": "any",
+  "RepoUrl": "https://github.com/Milesnocte/GambaGames",
+  "Tags": [
+    "Gambling",
+    "Casino",
+    "Deathroll",
+    "Blackjack"
+  ],
+  "DalamudApiLevel": 9,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "CanUnloadAsync": false,
+  "LoadPriority": 0,
+  "Punchline": "For all of your gambling needs",
+  "AcceptsFeedback": true
+}
