@@ -19,9 +19,9 @@
         "CanUnloadAsync": false,
         "LoadPriority": 0,
         "Punchline": "For all of your gambling needs",
-        "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/releases/download/Latest/latest.zip",
-        "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/releases/download/Latest/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/releases/download/Latest/latest.zip",
+        "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.0.3/latest.zip",
+        "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.0.3/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.0.3/latest.zip",
         "AcceptsFeedback": true
     }
 ]
