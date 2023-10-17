@@ -1,20 +1,24 @@
 {
-  "Author": "MilesNocte",
-  "Name": "GambaGames",
-  "Punchline": "For all of your gambling needs",
-  "Description": "A set of gambling games for casinos to use!",
-  "RepoUrl": "https://github.com/Milesnocte/GambaGames",
-  "InternalName": "GambaGames",
-  "ApplicableVersion": "any",
-  "Tags": [
-    "Gambling",
-    "Casino",
-    "Deathroll",
-    "Blackjack"
-  ],
-  "DalamudApiLevel": 9, 
+    "Author": "MilesNocte",
+    "Name": "GambaGames",
+    "AssemblyVersion": "0.0.0.1",
+    "Punchline": "For all of your gambling needs",
+    "Description": "A set of gambling games for casinos to use!",
+    "RepoUrl": "https://github.com/Milesnocte/GambaGames",
+    "InternalName": "GambaGames",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "Gambling",
+        "Casino",
+        "Deathroll",
+        "Blackjack"
+    ],
+    "DalamudApiLevel": 9,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
     "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
-    "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip"
-    
+    "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip", 
+    "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
+    "AcceptsFeedback": true
 }
