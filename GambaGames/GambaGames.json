@@ -12,5 +12,9 @@
     "Deathroll",
     "Blackjack"
   ],
-  "DalamudApiLevel": 9
+  "DalamudApiLevel": 9, 
+    "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
+    "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/blob/main/GambaGames/Releases/latest.zip"
+    
 }
