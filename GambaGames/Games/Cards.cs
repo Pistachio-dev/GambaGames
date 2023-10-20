@@ -94,24 +94,17 @@ public static class Deck
     }
 
     // Fisher-Yates shuffle
-    public static string Shuffle()
+    public static void Shuffle()
     {
-        try
-        {
-            Random rng = new Random();
-
-            int count = CardDeck.Count-1;
-            
-            for (int i = count; i > 1; i--) {  
-                int k = rng.Next(i + 1);
-                (CardDeck[k], CardDeck[i]) = (CardDeck[i], CardDeck[k]);
-            } 
-        }
-        catch (Exception e)
-        {
-            return e.ToString();
-        }
-        return "Ok";
+        Notify.Info("Shuffling");
+        Random rng = new Random();
+        int count = CardDeck.Count-1;
+        for (int i = count; i > 1; i--) 
+        {  
+            int k = rng.Next(i + 1);
+            (CardDeck[k], CardDeck[i]) = (CardDeck[i], CardDeck[k]);
+        } 
+        Notify.Success("Deck Shuffled");
     }
 }
 
@@ -141,7 +134,7 @@ public static class Hands
         
     }
 
-    public static string GetHand(string player, bool dealer)
+    public static string GetHand(string player, bool censorCards)
     {
         if (PlayerHands.FirstOrDefault(x => x.Key == player).Key == null)
         {
@@ -153,7 +146,7 @@ public static class Hands
         int counter = 0;
         foreach (var card in hand)
         {
-            if (dealer && hand.Count == 2)
+            if (censorCards && hand.Count == 2)
             {
                 if (counter == 1)
                 {
