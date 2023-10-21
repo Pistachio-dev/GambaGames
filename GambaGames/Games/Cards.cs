@@ -131,7 +131,6 @@ public static class Hands
         Deck.GetDeck().Remove(Deck.GetDeck()[0]);
 
         if (SplitAces.Contains(player)) GameOver.Add(player);
-        
     }
 
     public static string GetHand(string player, bool censorCards)

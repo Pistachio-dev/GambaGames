@@ -339,7 +339,7 @@ namespace GambaGames.Windows
                                 ImGui.PushID($"{DealerName.Replace(" ", "_")}_Header");
                                 if (ImGui.CollapsingHeader("Dealer (You)"))
                                 {
-                                    if (Hands.HandValue(Hands.GetHand(player, false), player) <= 21)
+                                    if (Hands.HandValue(Hands.GetHand(player, false), player) < 21)
                                     {
                                         if (!Hands.DealerStay(Hands.GetHand(DealerName, false)))
                                         {
