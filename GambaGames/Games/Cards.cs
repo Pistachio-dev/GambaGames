@@ -234,22 +234,25 @@ public static class Hands
 
     public static void Split(string player)
     {
-        HasSplit.Add(player);
         List<string> hand = PlayerHands.First(x => x.Key == player).Value;
         
         string newPlayer = $"{player} 2";
         List<string> newHand = new List<string>();
         newHand.Add(hand[1]);
-
-        if (hand[1].Contains("A"))
-        {
-            SplitAces.Add(player);
-        }
         
         PlayerHands.Add(new KeyValuePair<string, List<string>>(newPlayer, newHand));
         PlayerHands.First(x => x.Key == player).Value.Remove(hand[1]);
         Draw(player, 2);
         Draw(newPlayer, 2);
+        
+        HasSplit.Add(player);
+        HasSplit.Add($"{player} 2");
+        
+        if (hand[1].Contains("A"))
+        {
+            SplitAces.Add(player);
+            SplitAces.Add($"{player} 2");
+        }
     }
 
     public static bool DealerStay(string hand)
@@ -260,6 +263,7 @@ public static class Hands
         int aces = 0;
         bool softSeventeen = false;
         string[] cards = hand.Split(" ");
+        
         foreach (string card in cards)
         {
             if (card.IsNullOrEmpty()) continue;

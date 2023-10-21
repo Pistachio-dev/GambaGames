@@ -386,6 +386,7 @@ namespace GambaGames.Windows
                                             PlayersHands[counter] =
                                                 $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, false)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)})";
                                             ImGui.SameLine();
+                                            ImGui.PushID($"{DealerName}_copy");
                                             if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                             {
                                                 ImGui.SetClipboardText(PlayersHands[counter]);
@@ -400,9 +401,10 @@ namespace GambaGames.Windows
                                                 PlayersHands[counter] =
                                                     $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)}";
                                                 ImGui.SameLine();
+                                                ImGui.PushID($"{DealerName}_copy2");
                                                 if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                                 {
-                                                    ImGui.SetClipboardText(PlayersHands[counter]);
+                                                    ImGui.SetClipboardText(Hands.GetHand(DealerName, true));
                                                     Notify.Success("Copied hand to clipboard");
                                                 }
                                             }
@@ -710,6 +712,7 @@ namespace GambaGames.Windows
                                             continue;
                                         }
                                         
+                                        Notify.Error("Got here");
                                         playerRewards = (int) (int.Parse(PlayersBets[Players.IndexOf(player)].Replace(",", "")) * 2.5);
                                     }
                                     else if (Hands.HandValue(Hands.GetHand(player, false), player) > dealerHandVal)
@@ -743,41 +746,41 @@ namespace GambaGames.Windows
                                 }
                             }
                         }
-                    }
-                    
-                    // Process all of the split hands
-                    foreach (var player in SplitHandsResults)
-                    {
-                        if (player.Value == 0)
+                        
+                        // Process all of the split hands
+                        foreach (var player in SplitHandsResults)
                         {
-                            GameResults += $"{player.Key} \u2192 LOSS, "; // Is this loss?
+                            if (player.Value == 0)
+                            {
+                                GameResults += $"{player.Key} \u2192 LOSS, "; // Is this loss?
                                     
-                            ImGui.Text(
-                                $"{player.Key} lost");
-                        }
-                        else
-                        {
-                            GameResults +=
-                                $"{player.Key} \u2192 {string.Format(CultureInfo.InvariantCulture, "{0:n0}", player.Value)}, ";
+                                ImGui.Text(
+                                    $"{player.Key} lost");
+                            }
+                            else
+                            {
+                                GameResults +=
+                                    $"{player.Key} \u2192 {string.Format(CultureInfo.InvariantCulture, "{0:n0}", player.Value)}, ";
 
-                            ImGui.Text(
-                                $"{player.Key} won - Give {string.Format(CultureInfo.InvariantCulture, "{0:n0}", player.Value)} gil");
+                                ImGui.Text(
+                                    $"{player.Key} won - Give {string.Format(CultureInfo.InvariantCulture, "{0:n0}", player.Value)} gil");
+                            }
                         }
-                    }
                     
-                    ImGui.Separator();
-                    string resultString = $"/{ChatTypes[SelectedChatType]} {GameResults} Good Game!";
-                    ImGui.PushID($"final_copy");
-                    if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
-                    {
-                        ImGui.SetClipboardText(resultString);
-                        Notify.Success("Copied hand to clipboard");
+                        ImGui.Separator();
+                        string resultString = $"/{ChatTypes[SelectedChatType]} {GameResults} Good Game!";
+                        ImGui.PushID($"final_copy");
+                        if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
+                        {
+                            ImGui.SetClipboardText(resultString);
+                            Notify.Success("Copied hand to clipboard");
+                        }
+                        ImGui.SameLine();
+                        ImGui.PushItemWidth(300f.Scale());
+                        ImGui.PushID($"Final_result_string");
+                        ImGui.InputText($"", ref resultString, 200);
+                        GameResults = "";
                     }
-                    ImGui.SameLine();
-                    ImGui.PushItemWidth(300f.Scale());
-                    ImGui.PushID($"Final_result_string");
-                    ImGui.InputText($"", ref resultString, 200);
-                    GameResults = "";
                 }
                 catch (Exception e)
                 {
