@@ -292,8 +292,8 @@ namespace GambaGames.Windows
                     
                     foreach (var player in Players)
                     {
-                        Hands.Draw(player, Decks);
-                        Hands.Draw(player, Decks);
+                        Hands.Draw(player, Decks, true);
+                        Hands.Draw(player, Decks, true);
                     }
                     
                     GameInProgress = true;
@@ -315,6 +315,7 @@ namespace GambaGames.Windows
                         Hands.ClearHands();
                         HasSurrendered.Clear();
                         GameInProgress = false;
+                        CanSurrender = new bool[16]{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true};
                     }
 
                     if (GameIsOver && ShowGame)
@@ -345,7 +346,7 @@ namespace GambaGames.Windows
                                         {
                                             if (ImGui.Button("Hit", ImGuiHelpers.ScaledVector2(50, 22)))
                                             {
-                                                Hands.Draw(player, Decks);
+                                                Hands.Draw(player, Decks, false);
                                             }
 
                                             ImGui.Spacing();
@@ -389,7 +390,7 @@ namespace GambaGames.Windows
                                             ImGui.PushID($"{DealerName}_copy");
                                             if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                             {
-                                                ImGui.SetClipboardText(PlayersHands[counter]);
+                                                ImGui.SetClipboardText($"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)}");
                                                 Notify.Success("Copied hand to clipboard");
                                             }
 
@@ -404,7 +405,7 @@ namespace GambaGames.Windows
                                                 ImGui.PushID($"{DealerName}_copy2");
                                                 if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                                 {
-                                                    ImGui.SetClipboardText(Hands.GetHand(DealerName, true));
+                                                    ImGui.SetClipboardText($"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, false)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)})");
                                                     Notify.Success("Copied hand to clipboard");
                                                 }
                                             }
@@ -417,8 +418,17 @@ namespace GambaGames.Windows
                                     {
                                         ImGui.InputText($"", ref PlayersHands[counter], 200);
                                         ImGui.SameLine();
-                                        PlayersHands[counter] =
-                                            $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)}) - BUST";
+
+                                        if (Hands.HandValue(Hands.GetHand(player, false), player) > 21)
+                                        {
+                                            PlayersHands[counter] =
+                                                $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)}) - BUST";
+                                        }
+                                        else
+                                        {
+                                            PlayersHands[counter] =
+                                                $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)})";
+                                        }
                                         ImGui.SameLine();
                                         if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                         {
@@ -454,7 +464,7 @@ namespace GambaGames.Windows
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hit");
                                     if (ImGui.Button("Hit", ImGuiHelpers.ScaledVector2(50, 22)))
                                     {
-                                        Hands.Draw(player, Decks);
+                                        Hands.Draw(player, Decks, false);
                                         CanSurrender[counter] = false;
                                     }
 
@@ -648,13 +658,34 @@ namespace GambaGames.Windows
                                         {
                                             if (hasSplit)
                                             {
-                                                SplitHandsResults[player.Replace(" 2", "")] +=
-                                                    (int) (int.Parse(PlayersBets[Players.IndexOf(player)].Replace(",", "")) * 2.5);
-                                    
+                                                if (Hands.IsHandNatural(player))
+                                                {
+                                                    SplitHandsResults[player.Replace(" 2", "")] +=
+                                                        (int)(int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                            .Replace(",", "")) * 2.5);
+                                                }
+                                                else
+                                                {
+                                                    SplitHandsResults[player.Replace(" 2", "")] +=
+                                                        (int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                            .Replace(",", "")) * 2);
+                                                }
+
                                                 continue;
                                             }
-                                            
-                                            playerRewards = (int) (int.Parse(PlayersBets[Players.IndexOf(player)].Replace(",", "")) * 2.5);
+
+                                            if (Hands.IsHandNatural(player))
+                                            {
+                                                playerRewards =
+                                                    (int)(int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                        .Replace(",", "")) * 2.5);
+                                            }
+                                            else
+                                            {
+                                                playerRewards =
+                                                    (int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                        .Replace(",", "")) * 2);
+                                            }
                                         }
                                         else
                                         {
@@ -706,14 +737,34 @@ namespace GambaGames.Windows
                                     {
                                         if (hasSplit)
                                         {
-                                            SplitHandsResults[player.Replace(" 2", "")] +=
-                                                (int) (int.Parse(PlayersBets[Players.IndexOf(player)].Replace(",", "")) * 2.5);
-                                    
+                                            if (Hands.IsHandNatural(player))
+                                            {
+                                                SplitHandsResults[player.Replace(" 2", "")] +=
+                                                    (int)(int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                        .Replace(",", "")) * 2.5);
+                                            }
+                                            else
+                                            {
+                                                SplitHandsResults[player.Replace(" 2", "")] +=
+                                                    (int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                   .Replace(",", "")) * 2);
+                                            }
+
                                             continue;
                                         }
-                                        
-                                        Notify.Error("Got here");
-                                        playerRewards = (int) (int.Parse(PlayersBets[Players.IndexOf(player)].Replace(",", "")) * 2.5);
+
+                                        if (Hands.IsHandNatural(player))
+                                        {
+                                            playerRewards =
+                                                (int)(int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                                    .Replace(",", "")) * 2.5);
+                                        }
+                                        else
+                                        {
+                                            playerRewards =
+                                                (int.Parse(PlayersBets[Players.IndexOf(player)]
+                                                               .Replace(",", "")) * 2);
+                                        }
                                     }
                                     else if (Hands.HandValue(Hands.GetHand(player, false), player) > dealerHandVal)
                                     {
@@ -745,6 +796,9 @@ namespace GambaGames.Windows
                                         $"{player} won - Give {string.Format(CultureInfo.InvariantCulture, "{0:n0}", playerRewards)} gil");
                                 }
                             }
+                            
+                            // Clear out the dictionary per frame
+                            SplitHandsResults.Clear();
                         }
                         
                         // Process all of the split hands

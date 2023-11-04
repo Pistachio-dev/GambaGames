@@ -104,18 +104,18 @@ public static class Deck
             int k = rng.Next(i + 1);
             (CardDeck[k], CardDeck[i]) = (CardDeck[i], CardDeck[k]);
         } 
-        Notify.Success("Deck Shuffled");
     }
 }
 
 public static class Hands
 {
     private static List<KeyValuePair<string, List<string>>> PlayerHands = new();
+    private static List<string> HasHit = new List<string>();
     private static List<string> HasSplit = new List<string>();
     private static List<string> SplitAces = new();
     private static List<string> GameOver = new();
     
-    public static void Draw(string player, int decks)
+    public static void Draw(string player, int decks, bool initialHand)
     {
         if (Deck.GetDeck().Count == 0)
         {
@@ -131,6 +131,8 @@ public static class Hands
         Deck.GetDeck().Remove(Deck.GetDeck()[0]);
 
         if (SplitAces.Contains(player)) GameOver.Add(player);
+        
+        if(!HasHit.Contains(player) && !initialHand) HasHit.Add(player);
     }
 
     public static string GetHand(string player, bool censorCards)
@@ -241,8 +243,8 @@ public static class Hands
         
         PlayerHands.Add(new KeyValuePair<string, List<string>>(newPlayer, newHand));
         PlayerHands.First(x => x.Key == player).Value.Remove(hand[1]);
-        Draw(player, 2);
-        Draw(newPlayer, 2);
+        Draw(player, 2, true);
+        Draw(newPlayer, 2, true);
         
         HasSplit.Add(player);
         HasSplit.Add($"{player} 2");
@@ -367,9 +369,15 @@ public static class Hands
     public static void ClearHands()
     {
         PlayerHands = new();
+        HasHit.Clear();
         HasSplit.Clear();
         SplitAces.Clear();
         GameOver.Clear();
+    }
+    
+    public static bool IsHandNatural(string player)
+    {
+        return !HasHit.Contains(player);
     }
 
     public static bool IsPlayerGameOver(string player)
