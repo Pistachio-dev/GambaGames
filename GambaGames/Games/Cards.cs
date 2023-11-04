@@ -314,6 +314,8 @@ public static class Hands
 
         if (val == 21) return true;
 
+        if (val >= 18) return true;
+
         if (softSeventeen) return false;
         
         return val >= 17;
