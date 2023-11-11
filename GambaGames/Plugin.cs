@@ -35,7 +35,7 @@ namespace GambaGames
             var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "gamba-icon.png");
             var logoImage = PluginInterface.UiBuilder.LoadImage(imagePath);
             
-            MainWindow = new MainWindow(WindowSystem, logoImage, PartyList, Chat, clientState);
+            MainWindow = new MainWindow(WindowSystem, this.Configuration, logoImage, PartyList, Chat, clientState);
             
             WindowSystem.AddWindow(MainWindow);
 
