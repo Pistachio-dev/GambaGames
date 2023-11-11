@@ -2,7 +2,7 @@
     "Author": "MilesNocte",
     "Name": "GambaGames",
     "InternalName": "GambaGames",
-    "AssemblyVersion": "0.0.0.9",
+    "AssemblyVersion": "0.0.1.1",
     "Description": "A set of gambling games for casinos to use!",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/Milesnocte/GambaGames",
