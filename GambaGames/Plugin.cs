@@ -1,11 +1,15 @@
-﻿using Dalamud.Game.Command;
+﻿using System;
+using System.Drawing;
+using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.IO;
+using Dalamud.Interface.Style;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using GambaGames.Windows;
 using ECommons;
+using Lumina.Data.Parsing.Layer;
 
 namespace GambaGames
 {
@@ -27,24 +31,31 @@ namespace GambaGames
 
         public Plugin(IClientState clientState)
         {
-            ECommonsMain.Init(PluginInterface, this);
-
-            this.Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Configuration.Initialize(PluginInterface);
-            
-            var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "gamba-icon.png");
-            var logoImage = PluginInterface.UiBuilder.LoadImage(imagePath);
-            
-            MainWindow = new MainWindow(WindowSystem, this.Configuration, logoImage, PartyList, Chat, clientState);
-            
-            WindowSystem.AddWindow(MainWindow);
-
-            CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+            try
             {
-                HelpMessage = "/GambaGames: Open the gambling games window"
-            });
+                ECommonsMain.Init(PluginInterface, this);
 
-            PluginInterface.UiBuilder.Draw += DrawUI;
+                this.Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+                this.Configuration.Initialize(PluginInterface);
+            
+                var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "gamba-icon.png");
+                var logoImage = PluginInterface.UiBuilder.LoadImage(imagePath);
+            
+                MainWindow = new MainWindow(WindowSystem, this.Configuration, logoImage, PartyList, Chat, clientState);
+            
+                WindowSystem.AddWindow(MainWindow);
+
+                CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+                {
+                    HelpMessage = "/GambaGames: Open the gambling games window"
+                });
+
+                PluginInterface.UiBuilder.Draw += DrawUI;
+            }
+            catch (Exception e)
+            {
+                Chat.Print($"Critical Error, Screenshot this and send it to Miles\n{e}\nIf this is spamming shut off the plugin!", "GambaGames");
+            }
         }
 
         public void Dispose()

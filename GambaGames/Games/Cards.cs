@@ -96,7 +96,6 @@ public static class Deck
     // Fisher-Yates shuffle
     public static void Shuffle()
     {
-        Notify.Info("Shuffling");
         Random rng = new Random();
         int count = CardDeck.Count-1;
         for (int i = count; i > 1; i--) 
