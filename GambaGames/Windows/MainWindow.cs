@@ -366,7 +366,7 @@ namespace GambaGames.Windows
                                             ImGui.PushItemWidth(300f.Scale());
                                             ImGui.PushID($"{DealerName}_copy");
                                             ImGui.PushID($"{DealerName.Replace(" ", "_")}_hand");
-                                            ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                            ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                             if (Hands.GetHand(DealerName, true).Contains("??"))
                                             {
                                                 PlayersHands[counter] =
@@ -387,7 +387,7 @@ namespace GambaGames.Windows
                                         else
                                         {
                                             ImGui.PushItemWidth(300f.Scale());
-                                            ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                            ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                             ImGui.SameLine();
                                             PlayersHands[counter] =
                                                 $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, false)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)})";
@@ -402,7 +402,7 @@ namespace GambaGames.Windows
                                             if (Hands.GetHand(DealerName, true).Contains('?'))
                                             {
                                                 ImGui.PushItemWidth(300f.Scale());
-                                                ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                                ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                                 ImGui.SameLine();
                                                 PlayersHands[counter] =
                                                     $"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, true)}";
@@ -410,7 +410,7 @@ namespace GambaGames.Windows
                                                 ImGui.PushID($"{DealerName}_copy2");
                                                 if (ImGui.Button("Copy", ImGuiHelpers.ScaledVector2(50, 22)))
                                                 {
-                                                    ImGui.SetClipboardText($"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, false)} ({Hands.HandValue(Hands.GetHand(DealerName, false), player)})");
+                                                    ImGui.SetClipboardText($"/{ChatTypes[SelectedChatType]} Dealer's Hand: {Hands.GetHand(DealerName, false)}");
                                                     Notify.Success("Copied hand to clipboard");
                                                 }
                                             }
@@ -421,7 +421,7 @@ namespace GambaGames.Windows
                                     }
                                     else
                                     {
-                                        ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                        ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                         ImGui.SameLine();
 
                                         if (Hands.HandValue(Hands.GetHand(player, false), player) > 21)
@@ -536,13 +536,13 @@ namespace GambaGames.Windows
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
                                     if (player.Contains(" 2"))
                                     {
-                                        ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                        ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                         PlayersHands[counter] =
                                             $"/{ChatTypes[SelectedChatType]} {player.Replace(" 2", "")}'s Second Hand: {Hands.GetHand(player, false)} ({Hands.HandValue(Hands.GetHand(player, false), player)})";
                                     }
                                     else
                                     {
-                                        ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                        ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                         PlayersHands[counter] =
                                             $"/{ChatTypes[SelectedChatType]} {player}'s Hand: {Hands.GetHand(player, false)} ({Hands.HandValue(Hands.GetHand(player, false), player)})";
                                     }
@@ -558,7 +558,7 @@ namespace GambaGames.Windows
                                     ImGui.PushItemWidth(500f.Scale());
                                     ImGui.PushID($"{player}_copy");
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
-                                    ImGui.InputText($"", ref PlayersChoices[counter], 200);
+                                    ImGui.InputText($"", ref PlayersChoices[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                     if (CanSurrender[counter] && Hands.CanSplit(Hands.GetHand(player, false), player))
                                     {
                                         PlayersChoices[counter] =
@@ -591,7 +591,7 @@ namespace GambaGames.Windows
                                     ImGui.PushItemWidth(300f.Scale());
                                     ImGui.PushID($"{player}_copy");
                                     ImGui.PushID($"{player.Replace(" ", "_")}_hand");
-                                    ImGui.InputText($"", ref PlayersHands[counter], 200);
+                                    ImGui.InputText($"", ref PlayersHands[counter], 200, ImGuiInputTextFlags.ReadOnly);
                                     if (Hands.HandValue(Hands.GetHand(player, false), player) > 21)
                                     {
                                         PlayersHands[counter] =
@@ -837,7 +837,7 @@ namespace GambaGames.Windows
                         ImGui.SameLine();
                         ImGui.PushItemWidth(300f.Scale());
                         ImGui.PushID($"Final_result_string");
-                        ImGui.InputText($"", ref resultString, 200);
+                        ImGui.InputText($"", ref resultString, 200, ImGuiInputTextFlags.ReadOnly);
                         GameResults = "";
                     }
                 }

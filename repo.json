@@ -3,7 +3,7 @@
         "Author": "MilesNocte",
         "Name": "GambaGames",
         "InternalName": "GambaGames",
-        "AssemblyVersion": "0.0.1.1",
+        "AssemblyVersion": "0.0.1.2",
         "Description": "A set of gambling games for casinos to use!",
         "ApplicableVersion": "any",
         "Tags": [
@@ -19,9 +19,9 @@
         "CanUnloadAsync": false,
         "LoadPriority": 0,
         "Punchline": "For all of your gambling needs",
-        "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.1/latest.zip",
-        "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.1/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.1/latest.zip",
+        "DownloadLinkInstall": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.2/latest.zip",
+        "DownloadLinkTesting": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.2/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/Milesnocte/GambaGames/releases/download/0.0.1.2/latest.zip",
         "AcceptsFeedback": true
     }
 ]
