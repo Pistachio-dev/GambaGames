@@ -134,7 +134,7 @@ public static class Hands
         if(!HasHit.Contains(player) && !initialHand) HasHit.Add(player);
     }
 
-    public static string GetHand(string player, bool censorCards)
+    public static string GetHand(string player)
     {
         if (PlayerHands.FirstOrDefault(x => x.Key == player).Key == null)
         {
@@ -146,25 +146,10 @@ public static class Hands
         int counter = 0;
         foreach (var card in hand)
         {
-            if (censorCards && hand.Count == 2)
-            {
-                if (counter == 1)
-                {
-                    cardsInHand += $"?? ";
-                }
-                else
-                {
-                    cardsInHand += $"{card} ";
-                }
-            }
-            else
-            {
-                cardsInHand += $"{card} ";
-            }
-
+            cardsInHand += $"{card} ";
             counter++;
         }
-        return cardsInHand;
+        return cardsInHand.TrimEnd(' ');
     }
 
     public static int HandValue(string hand, string player)
