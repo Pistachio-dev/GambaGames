@@ -44,9 +44,7 @@ namespace GambaGames.Windows
         
         public OpenWindow OpenWindow { get; private set; } = OpenWindow.Overview;
         
-        public MainWindow(
-            WindowSystem WindowSystem, Configuration configuration, IDalamudTextureWrap logo, IPartyList partyList,
-            IChatGui chatGui, IClientState client) : base(
+        public MainWindow(IDalamudTextureWrap logo, IPartyList partyList, IClientState client) : base(
             "GambaGames", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -69,10 +67,9 @@ namespace GambaGames.Windows
         public override void Draw()
         {
             DealerName = clientState.LocalPlayer?.Name.TextValue;
-            
-            ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(5f.Scale(), 0));
             try
             {
+                ImGui.PushStyleVar(ImGuiStyleVar.CellPadding, new Vector2(5f.Scale(), 0));
                 if (ImGui.BeginTable($"GamblingTableContainer", 2, ImGuiTableFlags.Resizable))
                 {
                     ImGui.TableSetupColumn("LeftColumn", ImGuiTableColumnFlags.WidthFixed, ImGui.GetWindowWidth() / 2);
@@ -142,13 +139,12 @@ namespace GambaGames.Windows
                 
                 ImGui.EndChild();
                 ImGui.EndTable();
+                ImGui.PopStyleVar();
             }
             catch (Exception)
             {
                 // ignored
             }
-
-            ImGui.PopStyleVar();
         }
 
         public void DrawOverview()
