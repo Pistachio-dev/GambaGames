@@ -23,7 +23,6 @@ namespace GambaGames.Windows
         
         private bool ShowGame = true;
         private static int Decks = 2;
-        private static Dictionary<string, bool> PartyPlaying;
         private string? DealerName;
         private string? GameResults;
         private bool GameInProgress;
@@ -32,6 +31,7 @@ namespace GambaGames.Windows
         private static string[] ChatTypes;
         private static int SelectedChatType;
         private static Configuration Configuration;
+        private static Dictionary<string, bool> PartyPlaying;
         
         private List<string> Players = new();
         private List<string> NonPartyplayers = new();
@@ -325,7 +325,7 @@ namespace GambaGames.Windows
                 }
                 catch (Exception e)
                 {
-                    Chat.Print(e.ToString());
+                    
                 }
             }
             else
