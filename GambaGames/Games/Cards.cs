@@ -311,7 +311,7 @@ public static class Hands
 
         if (HasSplit.Contains(player.Replace(" 2", ""))) return false;
         
-        string[] cards = hand.Substring(0,hand.LastIndexOf(" ")).Split(" ");
+        string[] cards = hand.Substring(0).Split(" ");
 
         int counter = 0;
         
