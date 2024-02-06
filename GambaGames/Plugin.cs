@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Drawing;
 using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.IO;
-using Dalamud.Interface.Style;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using GambaGames.Windows;
 using ECommons;
-using Lumina.Data.Parsing.Layer;
 
 namespace GambaGames
 {
@@ -41,7 +38,7 @@ namespace GambaGames
                 var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "gamba-icon.png");
                 var logoImage = PluginInterface.UiBuilder.LoadImage(imagePath);
             
-                MainWindow = new MainWindow(logoImage, PartyList, clientState);
+                MainWindow = new MainWindow(logoImage, PartyList, clientState, Chat);
             
                 WindowSystem.AddWindow(MainWindow);
 

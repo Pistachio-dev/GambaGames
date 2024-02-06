@@ -3,8 +3,8 @@ using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Utility;
@@ -19,10 +19,11 @@ namespace GambaGames.Windows
         private IDalamudTextureWrap Logo;
         private IPartyList party;
         private IClientState clientState;
+        private static IChatGui Chat;
         
         private bool ShowGame = true;
         private static int Decks = 2;
-        private static bool[] Playing;
+        private static Dictionary<string, bool> PartyPlaying;
         private string? DealerName;
         private string? GameResults;
         private bool GameInProgress;
@@ -44,7 +45,7 @@ namespace GambaGames.Windows
         
         public OpenWindow OpenWindow { get; private set; } = OpenWindow.Overview;
         
-        public MainWindow(IDalamudTextureWrap logo, IPartyList partyList, IClientState client) : base(
+        public MainWindow(IDalamudTextureWrap logo, IPartyList partyList, IClientState client, IChatGui chat) : base(
             "GambaGames", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
         {
             this.SizeConstraints = new WindowSizeConstraints
@@ -56,6 +57,7 @@ namespace GambaGames.Windows
             this.Logo = logo;
             party = partyList;
             clientState = client;
+            Chat = chat;
             
             Deck.ClearDeck();
             Deck.CreateDeck(Decks);
@@ -98,7 +100,7 @@ namespace GambaGames.Windows
                         if (ImGui.Selectable("BlackJack", OpenWindow == OpenWindow.Blackjack))
                         {
                             // Create data structures for storing game info
-                            Playing = new bool[8];
+                            PartyPlaying = new Dictionary<string, bool>();
                             PlayersBets = new String[16]{"","","","","","","","","","","","","","","",""};
                             PlayersHands = new String[16]{"","","","","","","","","","","","","","","",""};
                             PlayersChoices = new String[16]{"","","","","","","","","","","","","","","",""};
@@ -184,76 +186,92 @@ namespace GambaGames.Windows
         {
             if (!GameInProgress)
             {
-                ImGui.TextWrapped($"Below you can set the number of decks to use in the game! (Default: 2)");
-            
-                if(ImGui.SliderInt("", ref Decks, 1, 8))
-                {
-                    Deck.ClearDeck();
-                    Deck.CreateDeck(Decks);
-                    Deck.Shuffle();
-                }
-
-                ImGui.SameLine();
-            
-                if (ImGui.Button("Reshuffle", ImGuiHelpers.ScaledVector2(75,25)))
-                {
-                    Deck.Shuffle();
-                }
-            
-                ImGui.Separator();
-                ImGui.TextWrapped($"You can also add players by targeting them, it is recommended to play in a party though.");
-                ImGui.Separator();
-
-                if (clientState.LocalPlayer?.TargetObject != null && clientState.LocalPlayer.TargetObject.ObjectKind == ObjectKind.Player)
-                {
-                    bool inparty = false;
-                    foreach (var partyMember in party)
-                    {
-                        if (clientState.LocalPlayer.TargetObject.Name.TextValue == partyMember.Name.TextValue)
-                            inparty = true;
-                    }
-
-                    if (!inparty)
-                    {
-                        ImGui.TextWrapped("Add Targeted player: ");
-
-                        ImGui.TextWrapped(clientState.LocalPlayer.TargetObject.Name.TextValue);
-                        ImGui.SameLine();
-                        if (ImGui.Button("Add", ImGuiHelpers.ScaledVector2(40, 22)))
-                        {
-                            NonPartyplayers.Add(clientState.LocalPlayer.TargetObject.Name.TextValue);
-                        }
-                        ImGui.SameLine();
-                        if (ImGui.Button("Remove", ImGuiHelpers.ScaledVector2(65, 22)))
-                        {
-                            NonPartyplayers.Remove(clientState.LocalPlayer.TargetObject.Name.TextValue);
-                        }
-
-                        ImGui.Separator();
-                    }
-                }
-            
-                ImGui.TextWrapped("Party Member Playing:");
-                ImGui.Spacing();
-
-                bool dealerPlaying = true;
-                ImGui.Checkbox("Dealer (You)", ref dealerPlaying);
-                
-                int counter = 0;
-                foreach (var partyMember in party)
-                {
-                    if (partyMember.Name.TextValue == DealerName)
-                    {
-                        counter++;
-                        continue;
-                    }
-                    
-                    ImGui.Checkbox(partyMember.Name.TextValue, ref Playing[counter]);
-                    counter++;
-                }
-
                 try
                 {
+                    ImGui.TextWrapped($"Below you can set the number of decks to use in the game! (Default: 2)");
+
+                    if (ImGui.SliderInt("", ref Decks, 1, 8))
+                    {
+                        Deck.ClearDeck();
+                        Deck.CreateDeck(Decks);
+                        Deck.Shuffle();
+                    }
+
+                    ImGui.SameLine();
+
+                    if (ImGui.Button("Reshuffle", ImGuiHelpers.ScaledVector2(75, 25)))
+                    {
+                        Deck.Shuffle();
+                    }
+
+                    ImGui.Separator();
+                    ImGui.TextWrapped(
+                        $"You can also add players by targeting them, it is recommended to play in a party though.");
+                    ImGui.Separator();
+
+                    if (clientState.LocalPlayer?.TargetObject != null &&
+                        clientState.LocalPlayer.TargetObject.ObjectKind == ObjectKind.Player)
+                    {
+                        bool inparty = false;
+                        foreach (var partyMember in party)
+                        {
+                            if (clientState.LocalPlayer.TargetObject.Name.TextValue == partyMember.Name.TextValue)
+                                inparty = true;
+                        }
+                        
+                        if (!inparty)
+                        {
+                            ImGui.TextWrapped("Add Targeted player: ");
+
+                            ImGui.TextWrapped(clientState.LocalPlayer.TargetObject.Name.TextValue);
+                            ImGui.SameLine();
+                            if (ImGui.Button("Add", ImGuiHelpers.ScaledVector2(40, 22)))
+                            {
+                                NonPartyplayers.Add(clientState.LocalPlayer.TargetObject.Name.TextValue);
+                            }
+
+                            ImGui.SameLine();
+                            if (ImGui.Button("Remove", ImGuiHelpers.ScaledVector2(65, 22)))
+                            {
+                                NonPartyplayers.Remove(clientState.LocalPlayer.TargetObject.Name.TextValue);
+                            }
+
+                            ImGui.Separator();
+                        }
+                    }
+
+                    ImGui.TextWrapped("Party Member Playing:");
+                    ImGui.Spacing();
+
+                    bool dealerPlaying = true;
+                    ImGui.Checkbox("Dealer (You)", ref dealerPlaying);
+
+                    int counter = 0;
+                    foreach (var partyMember in party)
+                    {
+                        if (partyMember.Name.TextValue == DealerName)
+                        {
+                            counter++;
+                            continue;
+                        }
+
+                        bool isPlaying;
+                        if (!PartyPlaying.TryAdd(partyMember.Name.TextValue, false))
+                        {
+                            isPlaying = PartyPlaying[partyMember.Name.TextValue];
+                        }
+                        else
+                        {
+                            isPlaying = false;
+                        }
+
+                        if (ImGui.Checkbox(partyMember.Name.TextValue, ref isPlaying))
+                        {
+                            PartyPlaying[partyMember.Name.TextValue] = isPlaying;
+                        };
+                        counter++;
+                    }
+
                     if (NonPartyplayers.Count > 0)
                     {
                         ImGui.TextWrapped("Other Members Playing:");
@@ -263,46 +281,51 @@ namespace GambaGames.Windows
                             ImGui.SameLine();
                             ImGui.TextWrapped(nonPartyplayer);
                             ImGui.SameLine();
-                            if (ImGui.Button("X", ImGuiHelpers.ScaledVector2(20, 22))) 
-                            { NonPartyplayers.Remove(nonPartyplayer);
+                            if (ImGui.Button("X", ImGuiHelpers.ScaledVector2(20, 22)))
+                            {
+                                NonPartyplayers.Remove(nonPartyplayer);
                             }
                         }
                     }
+
+                    ImGui.Spacing();
+
+                    if (ImGui.Button("Start Game", ImGuiHelpers.ScaledVector2(150, 50)))
+                    {
+                        foreach (var player in PartyPlaying)
+                        {
+                            if (party.All(x => x.Name.TextValue != player.Key)) PartyPlaying.Remove(player.Key);
+                        }
+                        
+                        foreach (var player in PartyPlaying)
+                        {
+                            if(!player.Value) continue;
+                            Players.Add(player.Key);
+                        }
+
+                        if (NonPartyplayers.Count > 0)
+                        {
+                            ImGui.TextWrapped("Other Member Playing:");
+                            foreach (var nonPartyplayer in NonPartyplayers)
+                            {
+                                Players.Add(nonPartyplayer);
+                            }
+                        }
+
+                        Players.Add(DealerName);
+
+                        foreach (var player in Players)
+                        {
+                            Hands.Draw(player, Decks, true);
+                            Hands.Draw(player, Decks, true);
+                        }
+
+                        GameInProgress = true;
+                    }
                 }
-                catch (Exception e) { } // Removing the last player from this group causes an exception for a single frame
-                
-                ImGui.Spacing();
-                
-                if (ImGui.Button("Start Game", ImGuiHelpers.ScaledVector2(150,50)))
+                catch (Exception e)
                 {
-                    counter = 0;
-                    foreach (var b in Playing)
-                    {
-                        if (b)
-                        {
-                            Players.Add(party[counter].Name.TextValue);
-                        }
-                        counter++;
-                    }
-                    
-                    if (NonPartyplayers.Count > 0)
-                    {
-                        ImGui.TextWrapped("Other Member Playing:");
-                        foreach (var nonPartyplayer in NonPartyplayers)
-                        {
-                            Players.Add(nonPartyplayer);
-                        }
-                    }
-                    
-                    Players.Add(DealerName);
-                    
-                    foreach (var player in Players)
-                    {
-                        Hands.Draw(player, Decks, true);
-                        Hands.Draw(player, Decks, true);
-                    }
-                    
-                    GameInProgress = true;
+                    Chat.Print(e.ToString());
                 }
             }
             else
@@ -317,10 +340,10 @@ namespace GambaGames.Windows
                     if (ImGui.Button("End Game", ImGuiHelpers.ScaledVector2(75f, 22)))
                     {
                         ShowGame = true;
-                        Players.Clear();
                         Hands.ClearHands();
                         HasSurrendered.Clear();
                         GameInProgress = false;
+                        Players = new List<string>();
                         CanSurrender = new bool[16]{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true};
                     }
 
