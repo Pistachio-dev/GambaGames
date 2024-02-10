@@ -91,30 +91,72 @@ namespace GambaGames.Windows
                         
                         ImGui.Spacing();
                         ImGui.Separator();
-                        
-                        if (ImGui.Selectable("Overview", OpenWindow == OpenWindow.Overview))
+
+                        if (!GameInProgress)
                         {
-                            OpenWindow = OpenWindow.Overview;
+                            if (ImGui.Selectable("Overview", OpenWindow == OpenWindow.Overview))
+                            {
+                                OpenWindow = OpenWindow.Overview;
+                            }
+
+                            if (ImGui.Selectable("BlackJack", OpenWindow == OpenWindow.Blackjack))
+                            {
+                                // Create data structures for storing game info
+                                PartyPlaying = new Dictionary<string, bool>();
+                                PlayersBets = new Dictionary<string, string>();
+                                PlayersHands = new String[16]
+                                    { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+                                PlayersChoices = new String[16]
+                                    { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+                                ChatTypes = new String[] { "p", "s", "shout" };
+                                CanSurrender = new bool[16]
+                                {
+                                    true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                                    true, true
+                                };
+                                OpenWindow = OpenWindow.Blackjack;
+                                GameIsOver = false;
+                                GameResults = "";
+                                HideCard = true;
+                            }
+
+                            if (ImGui.Selectable("Deathroll", OpenWindow == OpenWindow.DeathRoll))
+                            {
+                                OpenWindow = OpenWindow.DeathRoll;
+                            }
                         }
-                        
-                        if (ImGui.Selectable("BlackJack", OpenWindow == OpenWindow.Blackjack))
+                        else
                         {
-                            // Create data structures for storing game info
-                            PartyPlaying = new Dictionary<string, bool>();
-                            PlayersBets = new Dictionary<string, string>();
-                            PlayersHands = new String[16]{"","","","","","","","","","","","","","","",""};
-                            PlayersChoices = new String[16]{"","","","","","","","","","","","","","","",""};
-                            ChatTypes = new String[]{"p","s","shout"};
-                            CanSurrender = new bool[16]{true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true};
-                            OpenWindow = OpenWindow.Blackjack;
-                            GameIsOver = false;
-                            GameResults = "";
-                            HideCard = true;
-                        }
-                        
-                        if (ImGui.Selectable("Deathroll", OpenWindow == OpenWindow.DeathRoll))
-                        {
-                            OpenWindow = OpenWindow.DeathRoll;
+                            if (ImGui.Selectable("Overview", OpenWindow == OpenWindow.Overview, ImGuiSelectableFlags.Disabled))
+                            {
+                                OpenWindow = OpenWindow.Overview;
+                            }
+
+                            if (ImGui.Selectable("BlackJack", OpenWindow == OpenWindow.Blackjack, ImGuiSelectableFlags.Disabled))
+                            {
+                                // Create data structures for storing game info
+                                PartyPlaying = new Dictionary<string, bool>();
+                                PlayersBets = new Dictionary<string, string>();
+                                PlayersHands = new String[16]
+                                    { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+                                PlayersChoices = new String[16]
+                                    { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+                                ChatTypes = new String[] { "p", "s", "shout" };
+                                CanSurrender = new bool[16]
+                                {
+                                    true, true, true, true, true, true, true, true, true, true, true, true, true, true,
+                                    true, true
+                                };
+                                OpenWindow = OpenWindow.Blackjack;
+                                GameIsOver = false;
+                                GameResults = "";
+                                HideCard = true;
+                            }
+
+                            if (ImGui.Selectable("Deathroll", OpenWindow == OpenWindow.DeathRoll, ImGuiSelectableFlags.Disabled))
+                            {
+                                OpenWindow = OpenWindow.DeathRoll;
+                            }
                         }
                     }
                 }
@@ -273,6 +315,7 @@ namespace GambaGames.Windows
                         ImGui.TextWrapped("\u2192 Bet: ");
                         ImGui.SameLine();
                         string bet = PlayersBets[partyMember.Name.TextValue];
+                        ImGui.PushID($"{partyMember.Name.TextValue.Replace(" ", "_")}_bet_input");
                         if (ImGui.InputText(" ", ref bet, 10))
                         {
                             PlayersBets[partyMember.Name.TextValue] = string.Format(CultureInfo.InvariantCulture, "{0:n0}",
@@ -297,6 +340,7 @@ namespace GambaGames.Windows
                             ImGui.TextWrapped("\u2192 Bet: ");
                             ImGui.SameLine();
                             string bet = PlayersBets[nonPartyplayer];
+                            ImGui.PushID($"{nonPartyplayer.Replace(" ", "_")}_bet_input");
                             if (ImGui.InputText(" ", ref bet, 10))
                             {
                                 PlayersBets[nonPartyplayer] =  string.Format(CultureInfo.InvariantCulture, "{0:n0}",
