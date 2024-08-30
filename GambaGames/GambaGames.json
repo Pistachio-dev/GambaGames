@@ -2,7 +2,7 @@
     "Author": "MilesNocte",
     "Name": "GambaGames",
     "InternalName": "GambaGames",
-    "AssemblyVersion": "0.0.1.8",
+    "AssemblyVersion": "0.0.1.9",
     "Description": "A set of gambling games for casinos to use!",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/Milesnocte/GambaGames",
@@ -12,7 +12,7 @@
         "Deathroll",
         "Blackjack"
     ],
-    "DalamudApiLevel": 9,
+    "DalamudApiLevel": 10,
     "LoadRequiredState": 0,
     "LoadSync": true,
     "CanUnloadAsync": false,

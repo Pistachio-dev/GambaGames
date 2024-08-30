@@ -2,13 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>MilesNocte</Authors>
-    <Version>0.0.1.8</Version>
+    <Version>0.0.1.9</Version>
     <Description>GambaGames</Description>
     <PackageProjectUrl>https://github.com/Milesnocte/GambaGames</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -17,9 +17,9 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <Content Include="..\Data\gamba-icon.png">
+    <Content Include="..\Data\gambaicon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
@@ -35,9 +35,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.12" />
-    <PackageReference Include="XivCommon" Version="9.0.0" />
     <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
+    
+    <PackageReference Include="DalamudPackager" Version="2.1.13" />
+    <PackageReference Include="XivCommon" Version="9.0.0" />
       
     <Reference Include="FFXIVClientStructs">
       <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
@@ -68,5 +69,4 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
 </Project>
